@@ -71,6 +71,12 @@ module.exports= {
 			callback(results);
 		});
 	},
+	getAllUserProblems : function(callback){
+		var sql = "SELECT c.id as id,u.id as uid,u.type as type, u.username, u.email,c.updatedDate as ud, c.description FROM users as u, contactadmin as c WHERE c.uid = u.id";
+		db.getResults(sql,null,function(results){
+			callback(results);
+		});
+	},
 	getReleasedCampaings : function(callback){
 		var sql = "SELECT c.id as id,u.username as username, u.email as email, c.title as title, c.target_fund as tf, c.raised_fund as rf, c.publisedDate as pd, c.endDate as ed, c.status as status FROM campaigns as c ,users as u WHERE u.id = c.uid and c.status = 4";
 		db.getResults(sql,null,function(results){
@@ -115,6 +121,12 @@ module.exports= {
 	},
 	deleteReport: function(id,callback){
 		var sql = " DELETE FROM reports WHERE id = ?";
+		db.execute(sql,[id],function(status){
+			callback(status);
+		});
+	},
+	deleteProblem: function(id,callback){
+		var sql = " DELETE FROM contactadmin WHERE id = ?";
 		db.execute(sql,[id],function(status){
 			callback(status);
 		});

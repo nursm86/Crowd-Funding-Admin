@@ -18,7 +18,7 @@ $(document).ready(function(){
 						tableRow+="<td>"+element.email+"</td>";
 						tableRow+="<td>"+element.address+"</td>";
 						tableRow+="<td>"+element.phone+"</td>";
-						tableRow+="<td>Blocked</td>";
+						tableRow+="<td>Valid</td>";
 						
 						tableRow += "<td><a href='/admin/personalUseredit/"+element.id+"' class='btn btn-warning'>View</a>";
 						tableBody=tableBody+"<tr>"+tableRow+"</tr>";

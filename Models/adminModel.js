@@ -48,10 +48,10 @@ module.exports= {
 	search: function(user, callback){
 		var sql;
 		if(user.searchby == "email" || user.searchby == "username"){
-			sql = "select u.id as id,u.status as status,u.username as username, u.email as email ,u.type as type,p.name as name,p.contactno as phone,p.address as address from users as u, admin as p where u.id = p.uid and u."+user.searchby+" LIKE '%"+user.search+"%'";
+			sql = "select u.id as id,u.status as status,u.username as username, u.email as email ,u.type as type,p.name as name,p.phone as phone,p.address as address from users as u, admin as p where u.id = p.uid and u."+user.searchby+" LIKE '%"+user.search+"%'";
 		}
 		else{
-			sql = "select u.id as id,u.status as status,u.username as username, u.email as email ,u.type as type,p.name as name,p.contactno as phone,p.address as address from users as u, admin as p where u.id = p.uid and p."+user.searchby+" LIKE '%"+user.search+"%'";
+			sql = "select u.id as id,u.status as status,u.username as username, u.email as email ,u.type as type,p.name as name,p.phone as phone,p.address as address from users as u, admin as p where u.id = p.uid and p."+user.searchby+" LIKE '%"+user.search+"%'";
 		}
 		db.getResults(sql,null,function(results){
 			if(results.length > 0){

@@ -130,7 +130,6 @@ router.get('/personaluserlist',(req,res)=>{
 
 router.get('/adminlist',(req,res)=>{
 	adminModel.getAll(function(results){
-		console.log(results);
 		res.render('Admin/adminlist',{admins: results});
 	});
 });
@@ -156,6 +155,12 @@ router.get('/campaignslist',(req,res)=>{
 router.get('/problemlist',(req,res)=>{
 	userModel.getAllProblems(function(results){
 		res.render('Admin/problemlist',{problems : results});
+	});
+});
+
+router.get('/userproblemlist',(req,res)=>{
+	userModel.getAllUserProblems(function(results){
+		res.render('Admin/userproblem',{problems : results});
 	});
 });
 
@@ -361,6 +366,14 @@ router.get('/deleteReport/:id',(req,res)=>{
 	userModel.deleteReport(req.params.id,function(status){
 		if(status){
 			res.redirect('/admin/problemlist');
+		}
+	});
+});
+
+router.get('/deleteproblem/:id',(req,res)=>{
+	userModel.deleteProblem(req.params.id,function(status){
+		if(status){
+			res.redirect('/admin/userproblemlist');
 		}
 	});
 });

@@ -5,6 +5,8 @@ const exSession 		= require('express-session');
 const cookieParser 		= require('cookie-parser');
 const explayouts		= require('express-ejs-layouts');
 const admin				= require('./Controllers/Admin');
+const home				= require('./controllers/home');
+const login				= require('./controllers/login');
 const app				= express();
 const port				= 3000;
 
@@ -19,6 +21,8 @@ app.use(cookieParser());
 app.use(exSession({secret: 'secret value', saveUninitialized: true, resave: false}));
 
 app.use('/Admin', admin);
+app.use('/home',home);
+app.use('/login',login);
 
 //router
 app.get('/', (req, res)=>{
