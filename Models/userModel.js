@@ -2,8 +2,88 @@ const db = require('./db');
 
 module.exports= {
 	validate: function(user, callback){
-		var sql = "select * from users where username='"+user.username+"' and password='"+user.password+"'";
-		db.getResults(sql, function(results){
+		var sql = "select * from users where username=? and password=?";
+		db.getResults(sql,[user.username,user.password], function(results){
+			if(results.length >0 ){
+				callback(results[0]);
+			}
+		});
+	},
+	getValidCampaignCount : function(callback){
+		var sql = "SELECT COUNT(*) as count FROM campaigns WHERE status = 1";
+		db.getResults(sql,null, function(results){
+			if(results.length >0 ){
+				callback(results[0]);
+			}
+		});
+	},
+	getInValidCampaignCount : function(callback){
+		var sql = "SELECT COUNT(*) as count FROM campaigns WHERE status = 0";
+		db.getResults(sql,null, function(results){
+			if(results.length >0 ){
+				callback(results[0]);
+			}
+		});
+	},
+	getBlockCampaignCount : function(callback){
+		var sql = "SELECT COUNT(*) as count FROM campaigns WHERE status = 2";
+		db.getResults(sql,null, function(results){
+			if(results.length >0 ){
+				callback(results[0]);
+			}
+		});
+	},
+	getCompleteCampaignCount : function(callback){
+		var sql = "SELECT COUNT(*) as count FROM campaigns WHERE status = 3";
+		db.getResults(sql,null, function(results){
+			if(results.length >0 ){
+				callback(results[0]);
+			}
+		});
+	},
+	getReleaseCampaignCount : function(callback){
+		var sql = "SELECT COUNT(*) as count FROM campaigns WHERE status = 4";
+		db.getResults(sql,null, function(results){
+			if(results.length >0 ){
+				callback(results[0]);
+			}
+		});
+	},
+	getPersonalCount : function(callback){
+		var sql = "SELECT COUNT(*) as count FROM users WHERE type = 1";
+		db.getResults(sql,null, function(results){
+			if(results.length >0 ){
+				callback(results[0]);
+			}
+		});
+	},
+	getAdminCount : function(callback){
+		var sql = "SELECT COUNT(*) as count FROM users WHERE type = 0";
+		db.getResults(sql,null, function(results){
+			if(results.length >0 ){
+				callback(results[0]);
+			}
+		});
+	},
+	getOrganizationCount : function(callback){
+		var sql = "SELECT COUNT(*) as count FROM users WHERE type = 2";
+		db.getResults(sql,null, function(results){
+			if(results.length >0 ){
+				callback(results[0]);
+			}
+		});
+	},
+	getVolunteerCount : function(callback){
+		var sql = "SELECT COUNT(*) as count FROM users WHERE type = 3";
+		db.getResults(sql,null, function(results){
+			if(results.length >0 ){
+				callback(results[0]);
+			}
+		});
+	},
+	getUserName : function(user,callback){
+		var sql = "select * from users where "+user.field+"=?";
+		db.getResults(sql,[user.value], function(results){
 			if(results.length >0 ){
 				callback(results[0]);
 			}
@@ -41,6 +121,18 @@ module.exports= {
 			callback(status);
 		});
 	},
+	Donate :function(campaign, callback){
+		var sql = "UPDATE campaigns SET raised_fund = ? WHERE id = ?";
+		db.execute(sql,[campaign.rf,campaign.id],function(status){
+			callback(status);
+		});
+	},
+	DonateComplete :function(campaign, callback){
+		var sql = "UPDATE campaigns SET raised_fund = ? ,status = 3 WHERE id = ?";
+		db.execute(sql,[campaign.rf,campaign.id],function(status){
+			callback(status);
+		});
+	},
 	getAllPersonal: function(callback){
 		var sql = "select u.id as id,u.status as status,u.username as username, u.email as email ,u.type as type,p.name as name,p.contactno as phone,p.address as address from users as u, personal as p where u.id = p.uid";
 		db.getResults(sql,null,function(results){
@@ -60,7 +152,13 @@ module.exports= {
 		});
 	},
 	getAllCampaings : function(callback){
-		var sql = "SELECT c.id as id,u.username as username, u.email as email, c.title as title, c.target_fund as tf, c.raised_fund as rf, c.publisedDate as pd, c.endDate as ed, c.status as status FROM campaigns as c ,users as u WHERE u.id = c.uid and c.status != 4";
+		var sql = "SELECT c.image as image,c.id as id,u.username as username, u.email as email, c.title as title, c.target_fund as tf, c.raised_fund as rf, c.publisedDate as pd, c.endDate as ed, c.status as status FROM campaigns as c ,users as u WHERE u.id = c.uid and c.status != 4";
+		db.getResults(sql,null,function(results){
+			callback(results);
+		});
+	},
+	getAllValidCampaings : function(callback){
+		var sql = "SELECT u.id as uid,c.image as image,c.id as id,u.username as username, u.email as email, c.title as title, c.target_fund as tf, c.raised_fund as rf, c.publisedDate as pd, c.endDate as ed, c.status as status FROM campaigns as c ,users as u WHERE u.id = c.uid and c.status = 1";
 		db.getResults(sql,null,function(results){
 			callback(results);
 		});
@@ -109,6 +207,12 @@ module.exports= {
 	},
 	BlockCampaign: function(id,callback){
 		var sql = " UPDATE campaigns SET status = 2 where id = ?";
+		db.execute(sql,[id],function(status){
+			callback(status);
+		});
+	},
+	deleteCampaign : function(id,callback){
+		var sql = "DELETE FROM campaigns WHERE id = ?";
 		db.execute(sql,[id],function(status){
 			callback(status);
 		});

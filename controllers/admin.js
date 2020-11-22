@@ -2,26 +2,67 @@ const express 	 = require('express');
 const adminModel = require.main.require('./models/adminModel');
 const userModel  = require.main.require('./models/userModel');
 const validate   = require.main.require('./assets/validation/validate');
+
 const router 	 = express.Router();
 
-// router.get('*',  (req, res, next)=>{
-// 	if(req.cookies['uid'] == null && req.cookies['type'] !=0){
-// 		res.redirect('/login');
-// 	}else{
-// 		next();
-// 	}
-// });
+router.get('*',  (req, res, next)=>{
+	if(req.session.uid == null && req.session.type !=0){
+		res.redirect('/login');
+	}else{
+		next();
+	}
+});
 
 router.get('/', (req, res)=>{
-	adminModel.getById(1,function(result){
-		user = {
-			name : result.name,
-			email : result.email,
-			address : result.address,
-			phone : result.phone,
-			sq : result.sq
-		};
-		res.render('Admin/index',user);
+	var count;
+	var valid;
+	var invalid;
+	var block;
+	var complete;
+	var released;
+	var admin;
+	var personal;
+	var organization;
+	var volunteer;
+	userModel.getValidCampaignCount(function(result){
+		valid = result.count;
+		userModel.getInValidCampaignCount(function(result){
+			invalid = result.count;
+			userModel.getBlockCampaignCount(function(result){
+				block = result.count;
+				userModel.getCompleteCampaignCount(function(result){
+					complete = result.count;
+					userModel.getReleaseCampaignCount(function(result){
+						released = result.count;
+						userModel.getAdminCount(function(result){
+							admin = result.count;
+							userModel.getPersonalCount(function(result){
+								personal = result.count;
+								userModel.getOrganizationCount(function(result){
+									organization = result.count;
+									userModel.getVolunteerCount(function(result){
+										volunteer = result.count;
+										count = {
+											valid : valid,
+											invalid : invalid,
+											block : block,
+											complete : complete,
+											released : released,
+											admin : admin,
+											personal : personal,
+											organization : organization,
+											volunteer : volunteer
+										};
+										res.render('Admin/index',count);
+									});
+								});
+							});
+						});
+					});
+				});
+			});
+		});
+		
 	});
 });
 
@@ -51,6 +92,7 @@ router.post('/create',(req,res)=>{
 		sq : req.body.sq
 	};
 	validate.Admin(admin,function(error){
+		console.log(error);
 		if(error == null){
 			adminModel.insert(admin,function(status){
 				if(status){
@@ -329,6 +371,20 @@ router.post('/search',(req,res)=>{
 			res.json({user:results});
 		}else{
 			res.json({user:'error'});
+		}
+	});
+});
+
+router.post('/get',(req,res)=>{
+	var user = {
+		field: req.body.field,
+		value : req.body.val	
+	};
+	userModel.getUserName(user, function(results){
+		if(results!=null){
+			res.json({flag:true});
+		}else{
+			res.json({flag:false});
 		}
 	});
 });

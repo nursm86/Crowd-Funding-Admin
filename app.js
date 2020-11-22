@@ -7,6 +7,7 @@ const explayouts		= require('express-ejs-layouts');
 const admin				= require('./Controllers/Admin');
 const home				= require('./controllers/home');
 const login				= require('./controllers/login');
+const logout			= require('./controllers/logout');
 const app				= express();
 const port				= 3000;
 
@@ -23,7 +24,7 @@ app.use(exSession({secret: 'secret value', saveUninitialized: true, resave: fals
 app.use('/Admin', admin);
 app.use('/home',home);
 app.use('/login',login);
-
+app.use('/logout',logout);
 //router
 app.get('/', (req, res)=>{
 	res.render("login/index");

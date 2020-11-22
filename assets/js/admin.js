@@ -34,4 +34,53 @@ $(document).ready(function(){
 			}
 		});
 	});
+	$('#uname').focus(function(){
+		var erruname = $("#err_uname").val();
+		if(erruname!=null){
+			$('#err_uname').html("");
+		}
+	});
+	$('#uname').focusout(function(){
+		var uname = $("#uname").val();
+		$.ajax({
+			url: '/admin/get',
+			method: 'post',
+			datatype : 'json',
+			data : {'field':'username',
+					'val': uname},
+			success:function(response){
+				if(response.flag){
+					$('#err_uname').html("User Name is Already Taken Plz select another one!!!");
+				}
+			},
+			error:function(response){
+				
+			}
+		});
+	});
+
+	$('#email').focus(function(){
+		var erruname = $("#err_email").val();
+		if(erruname!=null){
+			$('#err_email').html("");
+		}
+	});
+	$('#email').focusout(function(){
+		var email = $("#email").val();
+		$.ajax({
+			url: '/admin/get',
+			method: 'post',
+			datatype : 'json',
+			data : {'field':'email',
+					'val': email},
+			success:function(response){
+				if(response.flag){
+					$('#err_email').html("Email is Already in Use Plz select another one!!!");
+				}
+			},
+			error:function(response){
+				
+			}
+		});
+	});
 });

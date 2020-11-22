@@ -10,53 +10,53 @@ module.exports= {
         var err_sq=null;
         var has_error = false;
 
-		if(admin.name == null)
+		if(typeof(admin.name) != 'undefined')
 		{
 			err_name = "Name Required";
 			has_error=true;
 		}
 
-        if(admin.username == null)
+        if(typeof(admin.username) != 'undefined')
 		{
 			err_uname = "Username Required";
 			has_error=true;
 		}
         
-		if(admin.password == null)
+		if(typeof(admin.password) != 'undefined')
 		{
 			err_pass= "Password Required";
 			has_error=true;
 		}
-		if(admin.cpassword == null)
+		if(typeof(admin.cpassword) != 'undefined')
 		{
 			err_cpass= "Password Required";
 			has_error=true;
 		}
 
-        if(admin.email == null)
+        if(typeof(admin.email) != 'undefined')
 		{
 			err_email = "Email Required";
 			has_error=true;
 		}
 
-		if(admin.contact == null)
+		if(typeof(admin.contact) != 'undefined')
 		{
 			err_contact= "contact No is Required";
 			has_error=true;
 		}
 
-		if(admin.address == null)
+		if(typeof(admin.address) != 'undefined')
 		{
 			err_address= "Address Required";
 			has_error=true;
 		}
 
-		if(admin.sq == null)
+		if(typeof(admin.sq) != 'undefined')
 		{
 			err_sq= "Sequrity Que is Required";
 			has_error=true;
 		}
-
+		
 		if(has_error){
 			var error = {
                 err_uname: err_uname,
