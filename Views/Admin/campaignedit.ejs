@@ -83,13 +83,10 @@
                 <a href="/admin/campaignslist" class="btn btn-warning">Cancel</a>
                 <% if(status == 1){%>
                     <a href="/admin/blockCampaign/<%=id%>" class="btn btn-danger">Block Campaign</a>
+                    <a href="/admin/releaseCampaign/<%=id%>" class="btn btn-success">Release Campaign</a>
                 <%} else if(status == 0){%>
                     <a href="/admin/blockCampaign/<%=id%>" class="btn btn-danger">Block Campaign</a>
                     <a href="/admin/verifyCampaign/<%=id%>" class="btn btn-success">Verify Campaign</a>
-                
-                <%} else if(status == 3){%>
-                    <a href="/admin/releaseCampaign/<%=id%>" class="btn btn-success">Release Campaign</a>
-                
               <%} else{%>
                     <a href="/admin/unblockCampaign/<%=id%>" class="btn btn-success">UnBlock Campaign</a>
               <%}%>
