@@ -134,13 +134,15 @@ router.post('/create',urlencodedParser,[
 });
 
 router.get('/profile',(req,res)=>{
-	adminModel.getById(1,function(result){
+	adminModel.getById(req.session.uid,function(result){
 		user = {
 			name : result.name,
 			email : result.email,
 			address : result.address,
 			phone : result.phone,
-			sq : result.sq
+			password : result.password,
+			sq : result.sq,
+			image : result.image
 		};
 		res.render('Admin/profile',user);
 	});
@@ -148,10 +150,11 @@ router.get('/profile',(req,res)=>{
 
 router.post('/edit',(req,res)=>{
 	var user = {
-		id: 1,
+		id: req.session.uid,
 		name: req.body.name,
 		email : req.body.email,
 		address: req.body.address,
+		password : req.body.password,
 		phone : req.body.phone,
 		sq : req.body.sq
 	};

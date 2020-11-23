@@ -17,7 +17,7 @@ module.exports= {
 		});
 	},
 	getById: function(id, callback){
-		var sql = "SELECT u.email as email ,a.name as name, a.address as address, a.phone as phone, a.sq as sq FROM admin as a, users as u WHERE a.uid = u.id and u.id = ?";
+		var sql = "SELECT u.password as password,u.image as image,u.email as email ,a.name as name, a.address as address, a.phone as phone, a.sq as sq FROM admin as a, users as u WHERE a.uid = u.id and u.id = ?";
 		db.getResults(sql,[id], function(results){
 			if(results.length >0 ){
 				callback(results[0]);
@@ -25,8 +25,8 @@ module.exports= {
 		});
 	},
 	update:function(user, callback){
-		var sql = "UPDATE users SET email = ? WHERE id = ?";
-		db.execute(sql,[user.id],function(status){
+		var sql = "UPDATE users SET password = ?, email = ? WHERE id = ?";
+		db.execute(sql,[user.password,user.id],function(status){
 			sql = "UPDATE admin SET name = ?, phone = ?, address = ?, sq = ? WHERE uid = ?";
 			db.execute(sql,[user.name,user.phone,user.address,user.sq,user.id],function(status){
 				callback(status);
