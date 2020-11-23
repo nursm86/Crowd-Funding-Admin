@@ -9,6 +9,9 @@ const admin						= require('./Controllers/Admin');
 const home						= require('./controllers/home');
 const login						= require('./controllers/login');
 const logout					= require('./controllers/logout');
+const path 						= require('path');
+const pdf 						= require('pdf').pdf;
+const fs						= require('fs');
 const app						= express();
 const port						= 3000;
 

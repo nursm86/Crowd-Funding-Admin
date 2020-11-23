@@ -1,19 +1,23 @@
 const express 	 				  = require('express');
 const bodyParser 				  = require('body-parser');
 const { check, validationResult } = require('express-validator');
+const session 					  = require('express-session');
 const adminModel 				  = require.main.require('./models/adminModel');
 const userModel  				  = require.main.require('./models/userModel');
 const validate   				  = require.main.require('./assets/validation/validate');
 const urlencodedParser 			  = bodyParser.urlencoded({extended : false});
 const router 	 				  = express.Router();
+const pdfMake 					  = require('../pdfmake/pdfmake');
+const vfsFonts 					  = require('../pdfmake/vfs_fonts');
 
-router.get('*',  (req, res, next)=>{
-	if(req.session.uid == null && req.session.type !=0){
-		res.redirect('/login');
-	}else{
-		next();
-	}
-});
+pdfMake.vfs = vfsFonts.pdfMake.vfs;
+// router.get('*',  (req, res, next)=>{
+// 	if(req.session.uid == null && req.session.type !=0){
+// 		res.redirect('/login');
+// 	}else{
+// 		next();
+// 	}
+// });
 
 router.get('/', (req, res)=>{
 	var count;
@@ -236,6 +240,177 @@ router.get('/personaluserlist',(req,res)=>{
 	});
 });
 
+router.get('/generate',(req,res)=>{
+	res.render('Admin/report');
+});
+
+router.post('/generate',(req,res)=>{
+	var amount = req.body.amount;
+	var table = req.body.ucount;
+	if(req.body.select == 3){
+		userModel.getOver(amount,function(results){
+			var body = [['User Name','Campaign Title', 'Donation Amount']];
+			results.forEach(element => {
+				body.push([element.uname,element.title.trim(),element.amount]);
+			});
+			var table = {
+				headerRows : 1,
+				widths : ['auto','auto'],
+				body : body
+			};
+			var documentDefinition = {
+				info: {
+					title: 'Report Document',
+					author: 'Md. Nur Islam',
+					subject: 'Top 10 Donation of this Website',
+					keywords: 'top 10',
+				},
+				content:[
+					{
+						text: 'Top 10 Donation Of the Website', style: 'header'
+					},
+					{
+					  layout: 'lightHorizontalLines',
+					  table: table
+					}
+				  ],
+				  styles: {
+					header: {
+					  fontSize: 22,
+					  bold: true
+					}
+				  }
+			};
+			const pdfDoc = pdfMake.createPdf(documentDefinition);
+			pdfDoc.getBase64((data)=>{
+				res.writeHead(200, 
+				{
+					'Content-Type': 'application/pdf',
+					'Content-Disposition':'attachment;filename="filename.pdf"'
+				});
+		
+				const download = Buffer.from(data.toString('utf-8'), 'base64');
+				res.end(download);
+			});
+		});
+	}
+	if(req.body.select == 4){
+		userModel.getCount(table,function(results){
+			var type = "Total Number of "+ table + "is :"+results[0].count;
+			var documentDefinition = {
+				content:[type]
+			};
+			const pdfDoc = pdfMake.createPdf(documentDefinition);
+			pdfDoc.getBase64((data)=>{
+				res.writeHead(200, 
+				{
+					'Content-Type': 'application/pdf',
+					'Content-Disposition':'attachment;filename="filename.pdf"'
+				});
+		
+				const download = Buffer.from(data.toString('utf-8'), 'base64');
+				res.end(download);
+			});
+		});
+	}
+	if(req.body.select == 1){
+		userModel.getTop10Donation(function(results){
+			var body = [['User Name','Campaign Title', 'Donation Amount']];
+			results.forEach(element => {
+				body.push([element.uname,element.title.trim(),element.amount]);
+			});
+			console.log(body);
+			var table = {
+				headerRows : 1,
+				widths : ['auto','auto'],
+				body : body
+			};
+			var documentDefinition = {
+				info: {
+					title: 'Report Document',
+					author: 'Md. Nur Islam',
+					subject: 'Top 10 Donation of this Website',
+					keywords: 'top 10',
+				},
+				content:[
+					{
+						text: 'Top 10 Donation Of the Website', style: 'header'
+					},
+					{
+					  layout: 'lightHorizontalLines',
+					  table: table
+					}
+				  ],
+				  styles: {
+					header: {
+					  fontSize: 22,
+					  bold: true
+					}
+				  }
+			};
+			const pdfDoc = pdfMake.createPdf(documentDefinition);
+			pdfDoc.getBase64((data)=>{
+				res.writeHead(200, 
+				{
+					'Content-Type': 'application/pdf',
+					'Content-Disposition':'attachment;filename="filename.pdf"'
+				});
+		
+				const download = Buffer.from(data.toString('utf-8'), 'base64');
+				res.end(download);
+			});
+		});
+	}
+	if(req.body.select == 2){
+		userModel.getTop10Donator(function(results){
+			var body = [['User Name','Total Donation']];
+			results.forEach(element => {
+				body.push([element.uname,element.totalDonation]);
+			});
+			console.log(body);
+			var table = {
+				headerRows : 1,
+				widths : ['auto','auto'],
+				body : body
+			};
+			var documentDefinition = {
+				info: {
+					title: 'Report Document',
+					author: 'Md. Nur Islam',
+					subject: 'Top 10 Donator of this Website',
+					keywords: 'top 10',
+				},
+				content:[
+					{
+						text: 'Top 10 Donator Of the Website', style: 'header'
+					},
+					{
+					  layout: 'lightHorizontalLines', 
+					  table: table
+					}
+				  ],
+				  styles: {
+					header: {
+					  fontSize: 22,
+					  bold: true
+					}
+				  }
+			};
+			const pdfDoc = pdfMake.createPdf(documentDefinition);
+			pdfDoc.getBase64((data)=>{
+				res.writeHead(200, 
+				{
+					'Content-Type': 'application/pdf',
+					'Content-Disposition':'attachment;filename="filename.pdf"'
+				});
+		
+				const download = Buffer.from(data.toString('utf-8'), 'base64');
+				res.end(download);
+			});
+		});
+	}
+});
+
 router.get('/adminlist',(req,res)=>{
 	adminModel.getAll(function(results){
 		res.render('Admin/adminlist',{admins: results});
@@ -263,6 +438,13 @@ router.get('/campaignslist',(req,res)=>{
 router.get('/problemlist',(req,res)=>{
 	userModel.getAllProblems(function(results){
 		res.render('Admin/problemlist',{problems : results});
+	});
+});
+
+router.get('/donationlist',(req,res)=>{
+	userModel.getAllDonations(function(results){
+		console.log(results);
+		res.render('Admin/donationHistory',{donations : results});
 	});
 });
 

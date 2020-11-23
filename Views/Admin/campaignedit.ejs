@@ -70,6 +70,8 @@
                                 InValid
                             <%} else if(status == 3){%>
                                 Complete
+                            <%} else if(status == 4){%>
+                                Released
                             <%} else{%>
                                 Blocked
                             <%}%>
@@ -87,10 +89,10 @@
                 <%} else if(status == 0){%>
                     <a href="/admin/blockCampaign/<%=id%>" class="btn btn-danger">Block Campaign</a>
                     <a href="/admin/verifyCampaign/<%=id%>" class="btn btn-success">Verify Campaign</a>
-              <%} else{%>
+              <%} else if(status == 2){%>
                     <a href="/admin/unblockCampaign/<%=id%>" class="btn btn-success">UnBlock Campaign</a>
               <%}%>
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editmodal"><i class="fa fa-pencil-square-o"></i>Edit</button>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editmodal" <%if(status == 4){%>hidden<%}%>><i class="fa fa-pencil-square-o"></i>Edit</button>
             </div>
         </div>
     </div>

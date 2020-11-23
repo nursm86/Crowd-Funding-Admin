@@ -175,6 +175,12 @@ module.exports= {
 			callback(results);
 		});
 	},
+	getAllDonations : function(callback){
+		var sql = "select c.id as cid,u.type as type,u.id as uid, r.id as rid,c.title as title, u.username as username ,r.amount as amount ,r.donationDate as ud from users as u, campaigns as c , donation as r where u.id = r.uid and c.id = r.cid ";
+		db.getResults(sql,null,function(results){
+			callback(results);
+		});
+	},
 	getAllUserProblems : function(callback){
 		var sql = "SELECT c.id as id,u.id as uid,u.type as type, u.username, u.email,c.updatedDate as ud, c.description FROM users as u, contactadmin as c WHERE c.uid = u.id";
 		db.getResults(sql,null,function(results){
@@ -359,6 +365,30 @@ module.exports= {
 			}else{
 				callback(null);
 			}
+		});
+	},
+	getOver: function(amount,callback){
+		var sql = "SELECT u.username as uname, c.title as title, d.amount as amount from donation as d,users as u, campaigns as c WHERE c.id = d.cid and u.id = d.uid and amount > "+amount;
+		db.getResults(sql,null,function(results){
+			callback(results);
+		});
+	},
+	getCount: function(table,callback){
+		var sql = "SELECT COUNT(*) as count from "+table;
+		db.getResults(sql,null,function(results){
+			callback(results);
+		});
+	},
+	getTop10Donation : function(callback){
+		var sql = "SELECT u.username as uname, c.title as title, d.amount as amount from donation as d, users as u, campaigns as c WHERE d.uid = u.id and c.id = d.cid ORDER BY amount LIMIT 10";
+		db.getResults(sql,null,function(results){
+			callback(results);
+		});
+	},
+	getTop10Donator : function(callback){
+		var sql = "SELECT u.username as uname, sum(d.amount) AS totalDonation FROM donation as d , users as u WHERE d.uid = u.id GROUP BY d.uid ORDER BY `totalDonation` DESC LIMIT 10";
+		db.getResults(sql,null,function(results){
+			callback(results);
 		});
 	}
 };
