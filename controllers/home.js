@@ -1,6 +1,9 @@
-const express 	 = require('express');
-const userModel  = require.main.require('./models/userModel');
-const router 	 = express.Router();
+const express 					  = require('express');
+const bodyParser 				  = require('body-parser');
+const userModel  				  = require.main.require('./models/userModel');
+const { check, validationResult } = require('express-validator');
+const urlencodedParser 			  = bodyParser.urlencoded({extended : false});
+const router 	 				  = express.Router();
 
 // router.get('*',  (req, res, next)=>{
 // 	if(req.cookies['uid'] == null && req.cookies['type'] !=0){
@@ -51,9 +54,6 @@ router.post('/donate/:id',(req,res)=>{
 		res.redirect('/login');
 	}
 	var raised;
-	if(!((req.body.donate - 0)> 0)){
-		res.redirect('/home');
-	}
 	userModel.getCampaignById(req.params.id,function(result){
 		raised = result.rf;
 		raised = (raised - 0) + (req.body.donate -0);
@@ -61,7 +61,7 @@ router.post('/donate/:id',(req,res)=>{
 			id : req.params.id,
 			rf : raised,
 		};
-		var total = req.results.tf;
+		var total = result.tf;
 		total = (total - 0) + (req.body.donate - 0);
 
 		if(total < raised){

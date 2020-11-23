@@ -194,7 +194,7 @@ module.exports= {
 		});
 	},
 	UnBlockUser: function(id,callback){
-		var sql = " UPDATE campaigns SET status = 1 where id = ?";
+		var sql = " UPDATE users SET status = 1 where id = ?";
 		db.execute(sql,[id],function(status){
 			callback(status);
 		});

@@ -4,58 +4,40 @@
 <div class="donorlist">
     
     <h1 class="text-white bg-dark text-center">
-    volunteer's
+    Admin's
     </h1><br>
-    <input value="volunteer" id="tablename" hidden>
-    <div class="row">
-        <div class="col-md-2">
-            <div class="form-group">
-                <select class="form-control" id="searchby">
-                    <option value = "name" selected hidden>Searh By</option>
-                        <option value="username" >User Name</option>
-                        <option value="name" >Name</option>
-                        <option value="email" >Email</option>
-                        <option value="address" >Address</option>
-                        <option value="phone" >contact no</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-8 donor">
-        <input type="text" name="search" id="search" placeholder="Search Admin Users">
-        </div>
-    </div><br>
 
-            <div class="row ">
+        <div class="row ">
 
-            <table class="table" id="myTable" name= "table">
-                <thead>
-                    <tr>
-                        <td>User Name</td>
-                        <td>Name</td>
-                        <td>Email</td>
-                        <td>Address</td>
-                        <td>Contact No</td>
-                        <td>Status</td>
-                    </tr>
-                </thead>
-                <tbody id = "suggestion">
-                    <div class="col-md-8">
-                        <% 
-                            admins.forEach(function(std){ %>
-                                <tr>
-                                    <td><%= std.username %></td>
-                                    <td><%= std.name %></td>
-                                    <td><%= std.email %></td>
-                                    <td><%= std.address %></td>
-                                    <td><%= std.phone %></td>
-                                    <td>Valid</td>
-                                </tr>
-                        <%
-                            }); 
-                        %>
-                </tbody>
-            </table>
-            </div>
+        <table class="table" id="myTable" name= "table">
+            <thead>
+                <tr>
+                    <td>User Name</td>
+                    <td>Name</td>
+                    <td>Email</td>
+                    <td>Address</td>
+                    <td>Contact No</td>
+                    <td>Status</td>
+                </tr>
+            </thead>
+            <tbody id = "suggestion">
+                <div class="col-md-8">
+                    <% 
+                        admins.forEach(function(std){ %>
+                            <tr>
+                                <td><%= std.username %></td>
+                                <td><%= std.name %></td>
+                                <td><%= std.email %></td>
+                                <td><%= std.address %></td>
+                                <td><%= std.phone %></td>
+                                <td>Valid</td>
+                            </tr>
+                    <%
+                        }); 
+                    %>
+            </tbody>
+        </table>
+        </div>
 </div>
 
 <script type="text/javascript" src = "/assets/js/admin.js"></script>

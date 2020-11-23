@@ -1,15 +1,15 @@
 //declaration
-const express 			= require('express');
-const bodyParser 		= require('body-parser');
-const exSession 		= require('express-session');
-const cookieParser 		= require('cookie-parser');
-const explayouts		= require('express-ejs-layouts');
-const admin				= require('./Controllers/Admin');
-const home				= require('./controllers/home');
-const login				= require('./controllers/login');
-const logout			= require('./controllers/logout');
-const app				= express();
-const port				= 3000;
+const express 					= require('express');
+const bodyParser 				= require('body-parser');
+const exSession 				= require('express-session');
+const cookieParser 				= require('cookie-parser');
+const explayouts				= require('express-ejs-layouts');
+const admin						= require('./Controllers/Admin');
+const home						= require('./controllers/home');
+const login						= require('./controllers/login');
+const logout					= require('./controllers/logout');
+const app						= express();
+const port						= 3000;
 
 //configuration
 app.set('view engine', 'ejs');

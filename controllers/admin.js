@@ -1,9 +1,11 @@
-const express 	 = require('express');
-const adminModel = require.main.require('./models/adminModel');
-const userModel  = require.main.require('./models/userModel');
-const validate   = require.main.require('./assets/validation/validate');
-
-const router 	 = express.Router();
+const express 	 				  = require('express');
+const bodyParser 				  = require('body-parser');
+const { check, validationResult } = require('express-validator');
+const adminModel 				  = require.main.require('./models/adminModel');
+const userModel  				  = require.main.require('./models/userModel');
+const validate   				  = require.main.require('./assets/validation/validate');
+const urlencodedParser 			  = bodyParser.urlencoded({extended : false});
+const router 	 				  = express.Router();
 
 router.get('*',  (req, res, next)=>{
 	if(req.session.uid == null && req.session.type !=0){
@@ -67,43 +69,68 @@ router.get('/', (req, res)=>{
 });
 
 router.get('/create',(req,res)=>{
-	var error = {
-		err_uname: "",
-		err_name : "",
-		err_pass : "",
-		err_cpass : "",
-		err_contact : "",
-		err_email : "",
-		err_address : "",
-		err_sq : ""
-	};
-	res.render('Admin/createadmin',error);
+	res.render('Admin/createadmin');
 });
 
-router.post('/create',(req,res)=>{
-	var admin = {
-		name : req.body.name,
-		username : req.body.username,
-		password : req.body.password,
-		cpassword : req.body.cpassword,
-		contact : req.body.contact,
-		email : req.body.email,
-		address : req.body.address,
-		sq : req.body.sq
-	};
-	validate.Admin(admin,function(error){
-		console.log(error);
-		if(error == null){
-			adminModel.insert(admin,function(status){
-				if(status){
-					res.redirect('admin/adminlist');
-				}
-			});
-		}
-		else{
-			res.render('admin/createadmin',error);
-		}
-	});
+router.post('/create',urlencodedParser,[
+	check('username', 'User Name field cannot be empty')
+		.exists()
+		.isLength({min : 6})
+		.withMessage('User name must be 6 character Long'),
+	check('password','Password does not match!!!')
+		.exists()
+		.isLength({min : 6})
+		.withMessage('Password must be atleast 6 character long!!!')
+		.custom((value, { req }) => value === req.body.cpassword)
+		.withMessage("Password does not match!!!"),
+	check('name','Name field can not be empty!!')
+		.exists()
+		.not().isEmpty()
+		.trim(),
+	check('contact','contact Field Can not be Empty!!!')
+		.exists()
+		.not().isEmpty()
+		.isLength({min : 11})
+		.withMessage('Contact number must be atleast 11')
+		.isLength({max : 13})
+		.withMessage('Contact number can be up to 13')
+		.isNumeric()
+		.withMessage('Contact Field Canot Contain String Value'),
+	check('email','Email Field Can not be Empty')
+		.exists()
+		.not().isEmpty()
+		.isEmail()
+		.withMessage('This is not a valid Email'),
+	check('address','Address Field can not be Empty')
+		.exists()
+		.not().isEmpty(),
+	check('sq','Security Quesiton must be answered')
+		.not().isEmpty()
+		.exists()
+],(req,res)=>{
+	const errors = validationResult(req); 
+	if(!errors.isEmpty()){
+		const alert = errors.array();
+		res.render('admin/createadmin',{
+			alert
+		});	
+	}
+	else{
+		var admin = {
+			username : req.body.username,
+			email : req.body.email,
+			password : req.body.password,
+			name : req.body.name,
+			contact : req.body.contact,
+			address : req.body.address,
+			sq : req.body.sq
+		};
+		adminModel.insert(admin,function(status){
+			if(status){
+				res.redirect("/admin/adminlist");
+			}
+		});
+	}
 });
 
 router.get('/profile',(req,res)=>{
