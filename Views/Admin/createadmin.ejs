@@ -21,7 +21,7 @@
 			<div class="form-group">
 					<span></span>
 				</div>
-		<form action="/admin/create" method="post"> 
+		<form action="/admin/create" method="post" enctype="multipart/form-data"> 
             <div class="form-group">
                 <label>Name:</label>
                 <input type="text" class="form-control" id ="name" name="name">
@@ -61,6 +61,12 @@
                 <label>Security Que:</label>
                 <input type="text" class="form-control" id="sq" name="sq" placeholder = "Who is your best friend?">
                 <span id="err_sq" style="color:red;"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Image:</label>
+                <input type="file" class="form-control" id="file" name="file">
+                <span id="err_file" style="color:red;"></span>
             </div>
 
             <div class="form-group">

@@ -2,8 +2,8 @@ const db = require('./db');
 
 module.exports= {
 	insert: function(admin, callback){
-		var sql = "INSERT INTO users(username,email, password, type, status) VALUES (?,?,?,?,?)";
-		db.execute(sql,[admin.username,admin.email,admin.password,0,1],function(status){
+		var sql = "INSERT INTO users(username,email, password, type, status, image) VALUES (?,?,?,?,?,?)";
+		db.execute(sql,[admin.username,admin.email,admin.password,0,1,admin.image],function(status){
 			if(status){
 				sql = "select id from users where username = ?";
 				db.getResults(sql,[admin.username], function(result){
@@ -31,6 +31,12 @@ module.exports= {
 			db.execute(sql,[user.name,user.phone,user.address,user.sq,user.id],function(status){
 				callback(status);
 			});
+		});
+	},
+	updatePic:function(user, callback){
+		var sql = "UPDATE users SET image = ? WHERE id = ?";
+		db.execute(sql,user,function(status){
+			callback(status);
 		});
 	},
 	getAll: function(callback){

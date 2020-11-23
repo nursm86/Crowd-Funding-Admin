@@ -108,7 +108,8 @@ router.post('/create',urlencodedParser,[
 		.not().isEmpty()
 		.exists()
 ],(req,res)=>{
-	const errors = validationResult(req); 
+	const errors = validationResult(req);
+	var image;
 	if(!errors.isEmpty()){
 		const alert = errors.array();
 		res.render('admin/createadmin',{
@@ -116,20 +117,37 @@ router.post('/create',urlencodedParser,[
 		});	
 	}
 	else{
-		var admin = {
-			username : req.body.username,
-			email : req.body.email,
-			password : req.body.password,
-			name : req.body.name,
-			contact : req.body.contact,
-			address : req.body.address,
-			sq : req.body.sq
-		};
-		adminModel.insert(admin,function(status){
-			if(status){
-				res.redirect("/admin/adminlist");
-			}
-		});
+		if(req.files){
+			var file = req.files.file;
+			var filename = file.name;
+			image = "/assets/system_images/" + filename;
+			file.mv('./assets/system_images/'+filename,function(err){
+				if(err){
+					res.redirect('/admin/createadmin');
+				}
+				else{
+					var admin = {
+						username : req.body.username,
+						email : req.body.email,
+						password : req.body.password,
+						name : req.body.name,
+						contact : req.body.contact,
+						address : req.body.address,
+						sq : req.body.sq,
+						image : image
+					};
+					console.log(image);
+					adminModel.insert(admin,function(status){
+						if(status){
+							res.redirect("/admin/adminlist");
+						}
+					});
+				}
+			});
+		}
+		else{
+			res.send("file e to pai na");
+		}
 	}
 });
 
@@ -163,6 +181,24 @@ router.post('/edit',(req,res)=>{
 			res.redirect('/admin/profile');
 		}
 	});
+});
+
+router.post('/picChange',(req,res)=>{
+	if(req.files){
+		var file = req.files.file;
+		var filename = req.session.uid + ".jpg";
+		var image = "/assets/system_images/" + filename;
+		file.mv('./assets/system_images/'+filename,function(err){
+			if(err){
+				res.redirect('/admin/profile');
+			}
+			else{
+				adminModel.updatePic([image,req.session.uid],function(status){
+					res.redirect('/admin/profile');
+				});
+			}
+		});
+	}
 });
 
 router.post('/campaignedit/:id',(req,res)=>{

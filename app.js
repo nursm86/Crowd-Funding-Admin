@@ -2,6 +2,7 @@
 const express 					= require('express');
 const bodyParser 				= require('body-parser');
 const exSession 				= require('express-session');
+const upload					= require('express-fileupload');
 const cookieParser 				= require('cookie-parser');
 const explayouts				= require('express-ejs-layouts');
 const admin						= require('./Controllers/Admin');
@@ -15,6 +16,7 @@ const port						= 3000;
 app.set('view engine', 'ejs');
 
 //middleware
+app.use(upload());
 app.use(explayouts);
 app.use('/assets', express.static('assets'));
 app.use(bodyParser.urlencoded({extended: true}));
