@@ -17,6 +17,12 @@ module.exports= {
 			}
 		});
 	},
+	insertIntoDonation: function(donation,callback){
+		var sql = "INSERT INTO donation (uid, cid, amount, donationDate) VALUES (?,?,?,?)";
+		db.execute(sql,donation,function(status){
+			callback(status);
+		});
+	},
 	getInValidCampaignCount : function(callback){
 		var sql = "SELECT COUNT(*) as count FROM campaigns WHERE status = 0";
 		db.getResults(sql,null, function(results){

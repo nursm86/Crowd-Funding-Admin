@@ -67,14 +67,29 @@ router.post('/donate/:id',(req,res)=>{
 		if(total < raised){
 			userModel.DonateComplete(raisedfund,function(status){
 				if(status){
-					res.redirect('/home');
+					let date = new Date().toDateString();
+					var donation = [req.session.uid,req.params.id,req.body.donate,date];
+					userModel.insertIntoDonation(donation,function(status){
+						if(status){
+							res.redirect('/home');
+						}
+					});
 				}
 			});
 		}
 		else{
 			userModel.Donate(raisedfund,function(status){
 				if(status){
-					res.redirect('/home');
+					let date = new Date().toDateString();
+					var donation = [req.session.uid,req.params.id,req.body.donate,date];
+					userModel.insertIntoDonation(donation,function(status){
+						if(status){
+							res.redirect('/home');
+						}
+						else{
+							res.send("donate to korte parla na vaya");
+						}
+					});
 				}
 			});
 		}
