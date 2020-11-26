@@ -7,6 +7,9 @@ module.exports= {
 			if(results.length >0 ){
 				callback(results[0]);
 			}
+			else{
+				callback(null);
+			}
 		});
 	},
 	getValidCampaignCount : function(callback){
@@ -380,7 +383,7 @@ module.exports= {
 		});
 	},
 	getTop10Donation : function(callback){
-		var sql = "SELECT u.username as uname, c.title as title, d.amount as amount from donation as d, users as u, campaigns as c WHERE d.uid = u.id and c.id = d.cid ORDER BY amount LIMIT 10";
+		var sql = "SELECT d.donationDate as ud,u.username as uname, c.title as title, d.amount as amount from donation as d, users as u, campaigns as c WHERE d.uid = u.id and c.id = d.cid ORDER BY amount DESC LIMIT 10";
 		db.getResults(sql,null,function(results){
 			callback(results);
 		});
@@ -389,6 +392,18 @@ module.exports= {
 		var sql = "SELECT u.username as uname, sum(d.amount) AS totalDonation FROM donation as d , users as u WHERE d.uid = u.id GROUP BY d.uid ORDER BY `totalDonation` DESC LIMIT 10";
 		db.getResults(sql,null,function(results){
 			callback(results);
+		});
+	},
+	getIdbyEmail : function(email,callback){
+		var sql = "select id from users where email = ?";
+		db.getResults(sql,[email],function(results){
+			callback(results[0]);
+		});
+	},
+	updatePasswordbyEmail : function(value,callback){
+		var sql = " UPDATE users SET password = ? where email = ?";
+		db.execute(sql,value,function(status){
+			callback(status);
 		});
 	}
 };

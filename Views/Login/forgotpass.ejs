@@ -30,57 +30,18 @@
 	</section>
 	<div class="container">
 		<br>
-		<h1 class="text-black text-center">Login</h1>
-		<center><h2 style="color: red;"><%= err_msg %> </h2></center>
+		<h1 class="text-black text-center">Password Recovery</h1>
 		<form name="myForm" action="" onsubmit="return validateForm()" method="POST">
 			<div class="col-lg-8 m-auto d-block">
 				<div class="form-group">
-					<label for="user">Username:</label>
-					<input type="text" name="username" id="user" class="form-control" required>
-					<span id="err_user" style="color:red;"></span>
+					<label for="user">Enter Your Email:</label>
+					<input type="email" name="email" id="email" class="form-control" required>
+					<span id="err_email" style="color:red;"><%=err_email%></span>
 				</div>
-				<div class="form-group">
-					<label for="password">Password</label>
-					<input type="password" name="password" id="pass" class="form-control" required>
-					<span  id="err_pass" style="color:red;"></span>
-				</div>
-				<div class="form-group">
-					<input type="checkbox"  name="rememberme"> Remember Me<br>
-					<span style="color:red;"></span>
-				</div>
-				<div class="form-group">
-					Forgot password?? <a href="/login/forgotpassword">Click here</a>
-				</div>
-				<div class="form-group">
-					
-				</div>
-				<input type="submit" name="login" value="Login" class="btn btn-success">
+				<input type="submit" name="verify" value="Send a OTP to Email" class="btn btn-success">
 				<br>
 			</div>
 		</form>
 	</div>
 </body>
-
 </html>
-
-<script>
-	function get(id){
-		return document.getElementById(id);
-	}
-	function validateForm(){
-		var user = get("user").value;
-        var pass = get("pass").value;
-		var err_user = get("err_user");
-		var err_pass = get("err_pass");
-		var has_error = true;
-		if(user ==""){
-			err_user.innerHTML ="User Name required";
-			has_error = false;
-		}
-		if(pass ==""){
-			err_pass.innerHTML ="Password required";
-			has_error = false;
-		}
-		return has_error;
-	}
-</script>

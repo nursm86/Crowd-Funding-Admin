@@ -1,7 +1,6 @@
 const express 	 				  = require('express');
 const bodyParser 				  = require('body-parser');
 const { check, validationResult } = require('express-validator');
-const session 					  = require('express-session');
 const adminModel 				  = require.main.require('./models/adminModel');
 const userModel  				  = require.main.require('./models/userModel');
 const validate   				  = require.main.require('./assets/validation/validate');
@@ -11,13 +10,14 @@ const pdfMake 					  = require('../pdfmake/pdfmake');
 const vfsFonts 					  = require('../pdfmake/vfs_fonts');
 
 pdfMake.vfs = vfsFonts.pdfMake.vfs;
-// router.get('*',  (req, res, next)=>{
-// 	if(req.session.uid == null && req.session.type !=0){
-// 		res.redirect('/login');
-// 	}else{
-// 		next();
-// 	}
-// });
+
+router.get('*',  (req, res, next)=>{
+	if(req.session.uid == null && req.session.type !=0){
+		res.redirect('/login');
+	}else{
+		next();
+	}
+});
 
 router.get('/', (req, res)=>{
 	var count;
@@ -255,7 +255,7 @@ router.post('/generate',(req,res)=>{
 			});
 			var table = {
 				headerRows : 1,
-				widths : ['auto','auto'],
+				widths : ['auto','auto','auto'],
 				body : body
 			};
 			var documentDefinition = {
@@ -319,10 +319,9 @@ router.post('/generate',(req,res)=>{
 			results.forEach(element => {
 				body.push([element.uname,element.title.trim(),element.amount]);
 			});
-			console.log(body);
 			var table = {
 				headerRows : 1,
-				widths : ['auto','auto'],
+				widths : ['*','*','*'],
 				body : body
 			};
 			var documentDefinition = {
@@ -367,7 +366,6 @@ router.post('/generate',(req,res)=>{
 			results.forEach(element => {
 				body.push([element.uname,element.totalDonation]);
 			});
-			console.log(body);
 			var table = {
 				headerRows : 1,
 				widths : ['auto','auto'],

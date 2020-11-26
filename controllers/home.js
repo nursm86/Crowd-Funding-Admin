@@ -6,7 +6,7 @@ const urlencodedParser 			  = bodyParser.urlencoded({extended : false});
 const router 	 				  = express.Router();
 
 // router.get('*',  (req, res, next)=>{
-// 	if(req.cookies['uid'] == null && req.cookies['type'] !=0){
+// 	if(req.session.uid == null){
 // 		res.redirect('/login');
 // 	}else{
 // 		next();
@@ -14,17 +14,31 @@ const router 	 				  = express.Router();
 // });
 
 router.get('/', (req, res)=>{
-	var value = {
-		id : req.session.uid,
-		type :req.session.type
-	};
+	var value;
+	if(req.session.uid != null){
+		value = {
+			id : req.session.uid,
+			type :req.session.type
+		};
+	}
+	else{
+		value = {
+			id : null,
+			type : null
+		};
+	}
+	console.log(value);
 	userModel.getAllValidCampaings(function(results){
-		res.render('Home/index',{user : value, campaigns : results});
+		var campaigns = results;
+		userModel.getTop10Donation(function(results){
+			res.render('Home/index',{user : value, campaigns : campaigns, donations : results});
+		});
 	});
 });
 
 router.get('/donate/:id',(req,res)=>{
 	if(req.session.uid == null){
+		req.session.err = "For Donating You should Login First";
 		res.redirect('/login');
 	}
 	var value = {
@@ -51,6 +65,7 @@ router.get('/donate/:id',(req,res)=>{
 
 router.post('/donate/:id',(req,res)=>{
 	if(req.session.uid == null){
+		req.session.err = "For Donating You should Login First";
 		res.redirect('/login');
 	}
 	var raised;
@@ -98,6 +113,7 @@ router.post('/donate/:id',(req,res)=>{
 
 router.get('delete/:id',(req,res)=>{
 	if(req.session.uid == null && req.session.uid == 0){
+		req.session.err = "For Donating You should Login First";
 		res.redirect('/login');
 	}
 	userModel.deleteCampaign(req.params.id,function(){
@@ -107,6 +123,7 @@ router.get('delete/:id',(req,res)=>{
 
 router.get('/editcampaign/:id',(req,res)=>{
 	if(req.session.uid == null && req.session.uid == 0){
+		req.session.err = "For Donating You should Login First";
 		res.redirect('/login');
 	}
 	var value = {

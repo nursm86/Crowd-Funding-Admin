@@ -25,10 +25,10 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <input type="number" id="n" name="amount" min="1" placeholder="Enter a Valid Amount" hidden>
+                                <input type="number" id="n" name="amount" min="1" placeholder="Enter a Valid Amount">
                             </div>
                             <div class="form-group" >
-                                <select id="u" name="ucount" hidden>
+                                <select id="u" name="ucount">
                                     <option value="users">All</option>
                                     <option value="admin">Admins</option>
                                     <option value="personal">Personal Users</option>
@@ -47,6 +47,8 @@
 
         <script type="text/javascript">
             $(document).ready(function(){
+                $("#n").hide();
+                $("#u").hide();
                 $("#val").change(function(){ 
                     var val = $('#val').val();
                     if(val == 1){
@@ -60,10 +62,12 @@
                     if(val == 3){
                         $("#n").show();
                         $("#u").hide();
+                        $(':number').show();
                     }
-                    if(val == 3){
+                    if(val == 4){
                         $("#n").hide();
                         $("#u").show();
+                        $("select").show();
                     }
                 });
             });

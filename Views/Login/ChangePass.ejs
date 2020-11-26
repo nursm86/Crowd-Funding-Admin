@@ -30,57 +30,40 @@
 	</section>
 	<div class="container">
 		<br>
-		<h1 class="text-black text-center">Login</h1>
-		<center><h2 style="color: red;"><%= err_msg %> </h2></center>
+        <h1 class="text-black text-center">Change Password</h1>
+        
+        <% if(typeof alert != 'undefined') { %>
+            <% alert.forEach(function(error) { %>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <%= error.msg %>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                  </div>
+            <% }) %>
+        <% } %>
+
 		<form name="myForm" action="" onsubmit="return validateForm()" method="POST">
 			<div class="col-lg-8 m-auto d-block">
 				<div class="form-group">
-					<label for="user">Username:</label>
-					<input type="text" name="username" id="user" class="form-control" required>
-					<span id="err_user" style="color:red;"></span>
+					<label for="user">Enter OTP from your Email:</label>
+					<input type="text" name="otp" id="otp" class="form-control" required>
+					<span id="err_email" style="color:red;"></span>
+                </div>
+                <div class="form-group">
+					<label for="user">Enter New Password :</label>
+					<input type="password" name="npass" id="npass" class="form-control" required>
+					<span id="err_email" style="color:red;"></span>
+                </div>
+                <div class="form-group">
+					<label for="user">Confirm New Password :</label>
+					<input type="password" name="cpass" id="cpass" class="form-control" required>
+					<span id="err_email" style="color:red;"></span>
 				</div>
-				<div class="form-group">
-					<label for="password">Password</label>
-					<input type="password" name="password" id="pass" class="form-control" required>
-					<span  id="err_pass" style="color:red;"></span>
-				</div>
-				<div class="form-group">
-					<input type="checkbox"  name="rememberme"> Remember Me<br>
-					<span style="color:red;"></span>
-				</div>
-				<div class="form-group">
-					Forgot password?? <a href="/login/forgotpassword">Click here</a>
-				</div>
-				<div class="form-group">
-					
-				</div>
-				<input type="submit" name="login" value="Login" class="btn btn-success">
+				<input type="submit" name="verify" value="Change Password" class="btn btn-success">
 				<br>
 			</div>
 		</form>
 	</div>
 </body>
-
 </html>
-
-<script>
-	function get(id){
-		return document.getElementById(id);
-	}
-	function validateForm(){
-		var user = get("user").value;
-        var pass = get("pass").value;
-		var err_user = get("err_user");
-		var err_pass = get("err_pass");
-		var has_error = true;
-		if(user ==""){
-			err_user.innerHTML ="User Name required";
-			has_error = false;
-		}
-		if(pass ==""){
-			err_pass.innerHTML ="Password required";
-			has_error = false;
-		}
-		return has_error;
-	}
-</script>

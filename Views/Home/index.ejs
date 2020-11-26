@@ -32,7 +32,7 @@
                             </a>
                             <div class="btn btn-warning"><span ><b>Target : <%=std.tf%>$</b></span></div>
                             <div><span ><b>Raised : <%=std.rf%>$</b></span></div>
-                            <div class="add-to-cart"><a class="btn btn-success" style="width:85px;font-family:consolas;margin-top:5px;" href="/home/donate/<%=std.id%>">Donate</a><a class="btn btn-warning" style="width:85px;font-family:consolas;margin-top:5px;" href="/home/editcampaign/<%=std.id%>" <% if(user.type != 0 ||(user.type != 0 && user.id != std.uid)){%> hidden <%}%>>Edit</a></span></div>
+                            <div class="add-to-cart"><a class="btn btn-success" style="width:85px;font-family:consolas;margin-top:5px;" href="/home/donate/<%=std.id%>">Donate</a><a class="btn btn-warning" style="width:85px;font-family:consolas;margin-top:5px;" href="/home/editcampaign/<%=std.id%>" <% if(!(user.type == 0 || user.id == std.uid)){%> hidden <%}%>>Edit</a></span></div>
                         </div>
                     </div> 
                 <%
@@ -46,22 +46,36 @@
     <!--------------------about us-------------->
     <section id="about-us">
         <div class="container">
-            <h1 class="title text-center">WHY Donate?</h1>
+            <h1 class="title text-center">Top 10 Donations :</h1>
             <div class="row">
-                <div class="col-md-6 about-us">
-                    <p class="about-title">There are lot of people who need Donations:</p>
-                    <ul>
-                        <li>Lorem ipsum dolor sit amet consectetur.</li>
-                        <li>Lorem ipsum dolor sit amet consectetur.</li>
-                        <li>Lorem ipsum dolor sit amet consectetur.</li>
-                        <li>Lorem ipsum dolor sit amet consectetur.</li>
-                        <li>Lorem ipsum dolor sit amet consectetur.</li>
-                        <li>Lorem ipsum dolor sit amet consectetur.</li>
-                    </ul>
+                <div class="col-md-6 ">
+                    <p class="about-title">There are lot of people who need Donations so donate and be proud of yourself</p>
+                    <center><table class="center table" id="myTable" name= "table">
+                <thead>
+                    <tr>
+                        <td>User Name</td>
+                        <td>Campaing Title</td>
+                        <td>Donation Amount</td>
+                        <td>Donated Date</td>
+                    </tr>
+                </thead>
+                <tbody id = "suggestion">
+                    <div class="col-md-8">
+                        <% 
+                            donations.forEach(function(std){ %>
+                                <tr>
+                                    <td><%= std.uname %></td>
+                                    <td><%= std.title %></td>
+                                    <td><%= std.amount %></td>
+                                    <td><%= std.ud %></td>
+                                </tr>
+                        <%
+                            }); 
+                        %>
+                </tbody>
+            </table></center>
+            </div>
                 </div>
-                 <div class="col-md-6">
-                     <img src="/assets/system_images/abou-us.png" class="img_about-us">
-                 </div>
             </div>
         </div>
     </section>
